@@ -1,50 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_flutter/models/cart.dart';
 import 'package:shop_flutter/models/product.dart';
+import 'package:shop_flutter/models/product_list.dart';
 import 'package:shop_flutter/utils/app_routes.dart';
 
 class ProductItem extends StatelessWidget {
-  const ProductItem({super.key});
+  final Product product;
+  const ProductItem({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context, listen: false);
-    final cart = Provider.of<Cart>(context);
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: GridTile(
-        footer: GridTileBar(
-          title: Text(product.name, textAlign: TextAlign.center),
-          backgroundColor: Colors.black87,
-          leading: Consumer<Product>(
-            builder: (ctx, product, _) => IconButton(
-              icon: Icon(
-                product.isFavorite ? Icons.favorite : Icons.favorite_border,
-              ),
-              color: Theme.of(context).hintColor,
+    return ListTile(
+      leading: CircleAvatar(backgroundImage: NetworkImage(product.imageUrl)),
+      title: Text(product.name),
+      trailing: SizedBox(
+        width: 100,
+        child: Row(
+          children: [
+            IconButton(
               onPressed: () {
-                product.toggleFavorite();
+                Navigator.of(
+                  context,
+                ).pushNamed(AppRoutes.productForm, arguments: product);
               },
+              icon: Icon(Icons.edit),
+              color: Theme.of(context).primaryColor,
             ),
-          ),
-          trailing: IconButton(
-            icon: Icon(Icons.shopping_cart),
-            color: Theme.of(context).hintColor,
-            onPressed: () {
-              cart.addItem(product);
-              print(cart.itemsCount);
-            },
-          ),
-        ),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.of(
-              context,
-            ).pushNamed(AppRoutes.productDetail, arguments: product);
-          },
-          child: Image.network(product.imageUrl, fit: BoxFit.cover),
+            IconButton(
+              onPressed: () {
+                final productList = Provider.of<ProductList>(
+                  context,
+                  listen: false,
+                );
+
+                showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Excluir Produto'),
+                    content: Text('Tem certeza?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: Text('Não'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: Text('Sim'),
+                      ),
+                    ],
+                  ),
+                ).then((answer) {
+                  if (answer ?? false) {
+                    productList.removeProduct(product);
+                  }
+                });
+              },
+              icon: Icon(Icons.delete),
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ],
         ),
       ),
     );

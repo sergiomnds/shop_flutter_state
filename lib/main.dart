@@ -6,6 +6,8 @@ import 'package:shop_flutter/models/product_list.dart';
 import 'package:shop_flutter/pages/cart_page.dart';
 import 'package:shop_flutter/pages/orders_page.dart';
 import 'package:shop_flutter/pages/product_detail_page.dart';
+import 'package:shop_flutter/pages/product_form_page.dart';
+import 'package:shop_flutter/pages/products_page.dart';
 import 'package:shop_flutter/pages/products_overview_page.dart';
 import 'package:shop_flutter/utils/app_routes.dart';
 
@@ -16,7 +18,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -37,6 +38,8 @@ class MyApp extends StatelessWidget {
           AppRoutes.productDetail: (ctx) => ProductDetailPage(),
           AppRoutes.cart: (ctx) => CartPage(),
           AppRoutes.orders: (ctx) => OrdersPage(),
+          AppRoutes.products: (ctx) => ProductsPage(),
+          AppRoutes.productForm: (ctx) => ProductFormPage(),
         },
         debugShowCheckedModeBanner: false,
       ),
