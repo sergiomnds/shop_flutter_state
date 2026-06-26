@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_flutter/models/auth.dart';
+//import 'package:shop_flutter/pages/orders_page.dart';
 import 'package:shop_flutter/utils/app_routes.dart';
+//import 'package:shop_flutter/utils/custom_route.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -18,7 +22,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.shop),
             title: Text('Loja'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+              Navigator.of(context).pushReplacementNamed(AppRoutes.authOrHome);
             },
           ),
           Divider(),
@@ -26,7 +30,10 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.payment),
             title: Text('Pedidos'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(AppRoutes.orders);
+              //Navigator.of(context).pushReplacementNamed(AppRoutes.orders);
+              /*Navigator.of(
+                context,
+              ).pushReplacement(CustomRoute(builder: (ctx) => OrdersPage()));*/
             },
           ),
           Divider(),
@@ -35,6 +42,15 @@ class AppDrawer extends StatelessWidget {
             title: Text('Gerenciar Produtos'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(AppRoutes.products);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.exit_to_app),
+            title: Text('Sair'),
+            onTap: () {
+              Provider.of<Auth>(context, listen: false).logout();
+              Navigator.of(context).pushReplacementNamed(AppRoutes.authOrHome);
             },
           ),
         ],
